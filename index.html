@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vidura Liyanage | Portfolio</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #0a0c0f;
+            color: #e4e7ec;
+            line-height: 1.6;
+        }
+
+        /* main grid: left sidebar + right content */
+        .container {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #101216;
+            box-shadow: 0 0 40px rgba(0,0,0,0.7);
+        }
+
+        /* ========== LEFT PANEL (profile) ========== */
+        .profile-panel {
+            background: #151a21;
+            padding: 2.5rem 2rem;
+            border-right: 1px solid #2a2f38;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .avatar {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .avatar img {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #8b5cf6;
+            box-shadow: 0 10px 25px -5px rgba(139, 92, 246, 0.4);
+            background: #2d2f36; /* fallback if image missing */
+        }
+
+        /* placeholder avatar using first letter (if no real image) */
+        .avatar-placeholder {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #8b5cf6, #6366f1);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            font-weight: 500;
+            color: white;
+            text-transform: uppercase;
+            border: 4px solid #8b5cf6;
+        }
+
+        .name {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-top: 0.5rem;
+            text-align: center;
+            background: linear-gradient(to right, #ffffff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #2d2f36;
+            color: #8b5cf6;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            margin: 0.8rem 0 1.5rem 0;
+            border: 1px solid #3f3f4e;
+            text-align: center;
+        }
+
+        .short-bio {
+            color: #a0a8b7;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            text-align: center;
+            border-left: 3px solid #8b5cf6;
+            padding-left: 1rem;
+            background: #1e222a;
+            border-radius: 0 12px 12px 0;
+            padding: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            margin: 2rem 0;
+        }
+
+        .social-links a {
+            color: #a0a8b7;
+            font-size: 1.5rem;
+            transition: 0.2s;
+            width: 45px;
+            height: 45px;
+            background: #1e222a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #2f3540;
+        }
+
+        .social-links a:hover {
+            color: white;
+            background: #8b5cf6;
+            border-color: #8b5cf6;
+            transform: translateY(-3px);
+        }
+
+        .contact-info {
+            margin-top: auto;
+            border-top: 1px solid #2a2f38;
+            padding-top: 2rem;
+            font-size: 0.9rem;
+            color: #868e9e;
+        }
+
+        .contact-info p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .contact-info i {
+            width: 20px;
+            color: #8b5cf6;
+        }
+
+        /* ========== RIGHT PANEL (content) ========== */
+        .content-panel {
+            padding: 3rem 3rem 3rem 2.5rem;
+            overflow-y: auto;
+        }
+
+        section {
+            margin-bottom: 3.5rem;
+        }
+
+        .section-title {
+            font-size: 1.7rem;
+            font-weight: 600;
+            margin-bottom: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: white;
+            border-bottom: 2px solid #2a2f38;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title i {
+            color: #8b5cf6;
+            font-size: 1.8rem;
+        }
+
+        /* about text */
+        .about-text {
+            color: #cbd5e1;
+            background: #1a1e26;
+            padding: 1.5rem;
+            border-radius: 18px;
+            border-left: 5px solid #8b5cf6;
+            font-size: 1.05rem;
+        }
+
+        /* projects grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.8rem;
+        }
+
+        .project-card {
+            background: #1a1e26;
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid #2a2f38;
+            transition: 0.25s ease;
+        }
+
+        .project-card:hover {
+            border-color: #8b5cf6;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -15px #8b5cf6;
+        }
+
+        .project-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .project-title i {
+            color: #8b5cf6;
+            font-size: 1.3rem;
+        }
+
+        .project-desc {
+            color: #9ca3af;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0 0.8rem 0;
+        }
+
+        .tech-tag {
+            background: #262b34;
+            color: #8b5cf6;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.8rem;
+            border-radius: 30px;
+            border: 1px solid #3d4350;
+        }
+
+        .project-link {
+            color: #8b5cf6;
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 0.5rem;
+            border-bottom: 1px dotted transparent;
+            transition: border 0.2s;
+        }
+
+        .project-link:hover {
+            border-bottom-color: #8b5cf6;
+        }
+
+        /* skills chips */
+        .skills-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            background: #1a1e26;
+            padding: 2rem;
+            border-radius: 28px;
+        }
+
+        .skill-chip {
+            background: #262b34;
+            color: #d1d5db;
+            padding: 0.6rem 1.4rem;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border: 1px solid #363c48;
+            transition: 0.15s;
+        }
+
+        .skill-chip:hover {
+            background: #8b5cf6;
+            color: white;
+            border-color: #8b5cf6;
+        }
+
+        /* education */
+        .edu-item {
+            background: #1a1e26;
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid #2a2f38;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .edu-icon {
+            background: #8b5cf6;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .edu-detail h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .edu-detail p {
+            color: #9ca3af;
+        }
+
+        .edu-date {
+            color: #8b5cf6;
+            font-weight: 500;
+            margin-top: 0.3rem;
+        }
+
+        /* responsive */
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .profile-panel {
+                height: auto;
+                position: static;
+            }
+            .content-panel {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- LEFT PROFILE PANEL -->
+    <div class="profile-panel">
+        <div class="avatar">
+            
+            <img src="profile.jpg" alt="Vidura Liyanage">
+            
+        </div>
+        <div class="name">Vidura Liyanage</div>
+        <div style="text-align: center"><span class="badge">💻 ⚡ ($ - $) ⚡ 💻</span></div>
+
+        <div class="short-bio">
+            <i class="fas fa-map-pin" style="margin-right: 6px; color: #8b5cf6;"></i> 
+            ☕ + 💻 = ❤️ | Building tools & scripts, exploring new tech every day ✨
+        </div>
+
+        <!-- SOCIAL MEDIA LINKS -->
+        <div class="social-links">
+            <a href="https://github.com/Viduraliyanage1" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/vidura-liyanage-61b11324b" target="_blank" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            
+            <a href="https://web.facebook.com/vidura.lakshan.liyanage" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
+            <a href="mailto:viduraliyanage012@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+        </div>
+
+        
+    </div>
+
+    <!-- RIGHT CONTENT PANEL -->
+    <div class="content-panel">
+        <!-- short about / description -->
+        <section>
+            <div class="section-title">
+                <i class="fas fa-user-astronaut"></i>
+                <span>About me</span>
+            </div>
+            <div class="about-text">
+                Software Engineering Undergraduate at The Open University of Sri Lanka. Passionate about software development, automation, and building practical digital solutions. I enjoy exploring new technologies, developing projects, and improving my problem-solving skills. Currently focused on expanding my knowledge in modern software development and real-world applications
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION (wisthara) -->
+        <section>
+            <div class="section-title">
+                <i class="fas fa-code-branch"></i>
+                <span>Projects</span>
+            </div>
+
+            <div class="projects-grid">
+                <!-- project 1 -->
+                <div class="project-card">
+                    <div class="project-title">
+                        <i class="#"></i> V Browser
+                    </div>
+                    <div class="project-desc">
+                        V Browser – Fast, Secure & Modern Desktop Browser** 🚀
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Electron</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">Javascript</span>
+                        <span class="tech-tag">HTML5 & CSS</span>
+                    </div>
+                    <a href="https://github.com/Viduraliyanage1/V-Browser" class="project-link">Live demo <i class="fas fa-arrow-right"></i></a>
+                    <span style="margin: 0 8px">|</span>
+                    <a href="https://github.com/Viduraliyanage1/V-Browser" class="project-link">GitHub</a>
+                </div>
+
+                <!-- project 2 -->
+                <div class="project-card">
+                    <div class="project-title">
+                        <i class="#"></i> V PDF TOOL
+                    </div>
+                    <div class="project-desc">
+                       📄 Need to lock, unlock, merge, or split your PDFs in a flash? Say hello to V PDF Tool – your all-in-one PDF solution!
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Custom Tkinter</span>
+                        <span class="tech-tag">PyPDF LIBRARY</span>
+                    </div>
+                    <a href="https://github.com/Viduraliyanage1/V-PDF-Tool" class="project-link">Live demo <i class="fas fa-arrow-right"></i></a>
+                    <span style="margin: 0 8px">|</span>
+                    <a href="https://github.com/Viduraliyanage1/V-PDF-Tool" class="project-link">GitHub</a>
+                </div>
+
+                
+
+                
+            </div>
+        </section>
+
+        <!-- technical skills -->
+        <section>
+            <div class="section-title">
+                <i class="fas fa-cogs"></i>
+                <span>Skills & Tools</span>
+            </div>
+            <div class="skills-cloud">
+                <span class="skill-chip">JavaScript/ES6</span>
+                <span class="skill-chip">PHP</span>
+                <span class="skill-chip">React Native</span>
+                <span class="skill-chip">Node.js</span>
+                <span class="skill-chip">Python</span>
+                <span class="skill-chip">Flask</span>
+                <span class="skill-chip">Java</span>
+                <span class="skill-chip">MYSQL</span>
+                <span class="skill-chip">HTML5</span>
+                <span class="skill-chip">CSS</span>
+                <span class="skill-chip">Git & GitHub</span>
+                <span class="skill-chip">Figma</span>
+                <span class="skill-chip">C</span>
+                <span class="skill-chip">Vue Js</span>
+                <span class="skill-chip">JQUERY</span>
+                <span class="skill-chip">ELECTRON</span>
+            </div>
+        </section>
+
+        <!-- education / university -->
+        <section>
+            <div class="section-title">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Education</span>
+            </div>
+            <div class="edu-item">
+                <div class="edu-icon"><i class="fas fa-university"></i></div>
+                <div class="edu-detail">
+                    <h3>Bachelor of Software Engineering(Hons) </h3>
+                    <p> Open University of Sri Lanka </p>
+                    
+                    
+                </div>
+            </div>
+        </section>
+
+        <!-- extra: achievements / certifications (thawa dewal) -->
+        <section>
+            <div class="section-title">
+                <i class="fas fa-award"></i>
+                <span>Certifications & Achievements</span>
+            </div>
+            <ul style="list-style: none; background: #1a1e26; padding: 1.5rem 2rem; border-radius: 20px; color: #cbd5e1;">
+                <li><i class="fas fa-check-circle" style="color: #8b5cf6; margin-right: 10px;"></i>Introduction to C - SOLO LEARN</li>
+                <li><i class="fas fa-check-circle" style="color: #8b5cf6; margin-right: 10px;"></i>Introduction to Python - SOLO LEARN</li>
+                <li><i class="fas fa-trophy" style="color: #8b5cf6; margin-right: 10px;"></i>Introduction to JavaScript - SOLO LEARN</li>
+                <li><i class="fas fa-check-circle" style="color: #8b5cf6; margin-right: 10px;"></i>Introduction to SQL - SOLO LEARN</li>
+                <li><i class="fas fa-check-circle" style="color: #8b5cf6; margin-right: 10px;"></i>Python Intermediate - SOLO LEARN</li>
+                <li><i class="fas fa-check-circle" style="color: #8b5cf6; margin-right: 10px;"></i>Introduction to JAVA - SOLO LEARN</li>
+            </ul>
+        </section>
+    </div>
+</div>
+
+<!-- optional: small footer note (not necessary) -->
+<div style="text-align: center; color: #4b5563; font-size: 0.8rem; padding: 1rem; background: #0a0c0f;">
+               Vidura Liyanage | viduraliyanage012@gmail.com 
+</div>
+</body>
+</html>

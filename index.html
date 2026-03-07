@@ -355,6 +355,65 @@
             border-color: #8b5cf6;
             color: white;
         }
+        /* Top Notification Bar - නිතරම උඩින් පෙනෙන්න */
+.top-notification {
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    color: white;
+    text-align: center;
+    padding: 0.8rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(5px);
+}
+
+.top-notification a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.4rem 1.5rem;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.top-notification a:hover {
+    background: rgba(255,255,255,0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.top-notification i {
+    font-size: 1.1rem;
+}
+
+.blink-dot {
+    width: 10px;
+    height: 10px;
+    background: #4ade80;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(74, 222, 128, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
+    }
+}
 
         /* responsive */
         @media (max-width: 900px) {
@@ -372,6 +431,18 @@
     </style>
 </head>
 <body>
+    <!-- නිතරම උඩින් පෙනෙන GitHub Notification Bar -->
+<div class="top-notification">
+    <span class="blink-dot"></span>
+    <a href="https://github.com/Viduraliyanage1?tab=repositories" target="_blank">
+        <i class="fab fa-github"></i>
+        Visit GitHub Repository 
+        <i class="fas fa-arrow-right"></i>
+        <span style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 30px; font-size: 0.8rem; margin-left: 5px;">
+            View All Projects
+        </span>
+    </a>
+</div>
 <div class="container">
     <!-- LEFT PROFILE PANEL -->
     <div class="profile-panel">

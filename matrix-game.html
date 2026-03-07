@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Mind Relax · Vidura</title>
+    <!-- Font Awesome (icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0c0f;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            color: #e0e4f0;
+        }
+
+        .game-wrapper {
+            max-width: 1000px;
+            width: 100%;
+            background: #12161f;
+            border-radius: 42px;
+            border: 1px solid #2a2f3c;
+            box-shadow: 0 20px 40px -15px #00000080, 0 0 0 1px #2e3440 inset;
+            overflow: hidden;
+            backdrop-filter: blur(2px);
+        }
+
+        /* matrix header — digital vibe */
+        .matrix-header {
+            background: #1b212c;
+            padding: 24px 28px 18px 28px;
+            border-bottom: 2px solid #2b313e;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .title-section h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(130deg, #b3f0ff, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .title-section i {
+            color: #6d8eff;
+            margin-right: 6px;
+        }
+
+        .score-panel {
+            background: #1e2632;
+            padding: 12px 28px;
+            border-radius: 100px;
+            border: 1px solid #3a4052;
+            box-shadow: 0 0 15px #4c6ef5;
+            font-weight: 600;
+            font-size: 1.7rem;
+            color: #f0f3ff;
+        }
+
+        .score-panel i {
+            color: #fbbf24;
+            margin-right: 10px;
+        }
+
+        /* joke strip — moving thoughts */
+        .joker-strip {
+            background: #1b212c;
+            padding: 16px 28px;
+            border-bottom: 1px dashed #3b4252;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .joke-icon {
+            background: #2d3748;
+            border-radius: 60px;
+            padding: 8px 18px;
+            color: #ffd966;
+            font-weight: 600;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #5b6783;
+        }
+
+        .joke-text {
+            font-size: 1.2rem;
+            color: #cbd5e0;
+            flex: 1;
+            font-style: italic;
+            letter-spacing: 0.2px;
+            text-shadow: 0 0 5px #a0b0ff;
+            transition: 0.3s;
+        }
+
+        .refresh-joke {
+            background: none;
+            border: 1px solid #4b5563;
+            color: #b9c8e0;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: 0.2s;
+        }
+
+        .refresh-joke:hover {
+            background: #2d3a4f;
+            color: white;
+            border-color: #8b5cf6;
+            transform: rotate(60deg);
+        }
+
+        /* main game area — matrix grid */
+        .matrix-grid-area {
+            padding: 30px 28px;
+            background: #0f141c;
+        }
+
+        .info-tip {
+            margin-bottom: 20px;
+            font-size: 1rem;
+            color: #96a7c9;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tip-badge {
+            background: #242b38;
+            border-radius: 30px;
+            padding: 6px 18px;
+            border-left: 4px solid #8b5cf6;
+        }
+
+        .matrix-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .matrix-card {
+            background: #1a212e;
+            aspect-ratio: 1/1;
+            border-radius: 28px;
+            border: 2px solid #2d3548;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            font-weight: 600;
+            color: #cbd5e0;
+            cursor: pointer;
+            transition: 0.18s ease;
+            box-shadow: 0 8px 0 #0b0e14;
+            user-select: none;
+        }
+
+        .matrix-card.matrix-glow {
+            background: #2f3b54;
+            border-color: #a78bfa;
+            color: white;
+            transform: scale(0.98);
+            box-shadow: 0 0 25px #8b5cf6;
+        }
+
+        .matrix-card:active {
+            transform: translateY(5px);
+            box-shadow: 0 2px 0 #0b0e14;
+        }
+
+        /* game stats and reset */
+        .game-stats {
+            background: #1b212e;
+            border-radius: 40px;
+            padding: 20px 26px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #313a4b;
+            margin-top: 15px;
+        }
+
+        .streak-box {
+            background: #242d3e;
+            border-radius: 40px;
+            padding: 10px 24px;
+            font-size: 1.3rem;
+        }
+
+        .streak-box i {
+            color: #f87171;
+            margin-right: 8px;
+        }
+
+        .btn-reset {
+            background: #2d3748;
+            border: 1px solid #5f6b84;
+            color: #e2e8f0;
+            border-radius: 40px;
+            padding: 12px 32px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-reset:hover {
+            background: #3f4a60;
+            border-color: #8b5cf6;
+            color: white;
+        }
+
+        .footer-note {
+            background: #10141e;
+            padding: 22px 28px;
+            text-align: center;
+            color: #7f8ea3;
+            border-top: 1px solid #252d3a;
+            font-size: 0.95rem;
+        }
+
+        .footer-note a {
+            color: #a78bfa;
+            text-decoration: none;
+            font-weight: 500;
+            margin: 0 5px;
+        }
+
+        .mind-message {
+            background: #1f2a37;
+            border-radius: 30px;
+            padding: 16px 28px;
+            margin: 15px 0 0 0;
+            color: #b3d0ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 8px solid #8b5cf6;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 600px) {
+            .matrix-container {
+                gap: 8px;
+            }
+            .matrix-card {
+                font-size: 2.2rem;
+            }
+            .matrix-header {
+                flex-direction: column;
+                align-items: start;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="game-wrapper">
+
+    <!-- header : title + live score -->
+    <div class="matrix-header">
+        <div class="title-section">
+            <h1><i class="fas fa-cubes"></i> matrix · mind<span style="font-weight:300;">Free</span></h1>
+            <div style="color:#9bb0d0; margin-top: 5px;"><i class="fas fa-brain"></i> play to relax · tap the matrix</div>
+        </div>
+        <div class="score-panel" id="scoreDisplay">
+            <i class="fas fa-star"></i> <span id="scoreValue">0</span>
+        </div>
+    </div>
+
+    <!-- joke row — free your mind :) -->
+    <div class="joker-strip">
+        <span class="joke-icon"><i class="fa-regular fa-face-smile-wink"></i> mind reset</span>
+        <span class="joke-text" id="jokeMessage">👇 click matrix, score grows, mind floats ...</span>
+        <button class="refresh-joke" id="newJokeBtn"><i class="fas fa-dice"></i></button>
+    </div>
+
+    <!-- main game matrix 4x4 (16 cells) -->
+    <div class="matrix-grid-area">
+        <div class="info-tip">
+            <span class="tip-badge"><i class="fas fa-hand-pointer"></i> tap any glowing tile → +1 point</span>
+            <span class="tip-badge"><i class="far fa-laugh"></i> joke changes every 5 moves</span>
+        </div>
+
+        <!-- 4x4 grid -->
+        <div class="matrix-container" id="matrixGrid"></div>
+
+        <!-- live stats: clicks / reset -->
+        <div class="game-stats">
+            <div class="streak-box"><i class="fas fa-clock"></i> moves <span id="moveCounter">0</span></div>
+            <div class="btn-reset" id="resetGameBtn"><i class="fas fa-undo-alt"></i> reset · clear mind</div>
+        </div>
+
+        <!-- relaxing message / motivation -->
+        <div class="mind-message" id="mindFreeMessage">
+            <i class="fas fa-spa" style="font-size:1.8rem;"></i>
+            <span id="dynamicMindText">tap freely … let thoughts flow</span>
+        </div>
+    </div>
+
+    <!-- footer + contact (vidura) -->
+    <div class="footer-note">
+        <i class="fas fa-code"></i> Vidura Liyanage · 
+        <a href="#"><i class="fab fa-github"></i></a> · 
+        <a href="#"><i class="fas fa-envelope"></i></a> · 
+        <span id="footerJokeTip"> ☕ matrix relaxer 1.0</span>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ---------- JOKE DATABASE (free your mind) ----------
+        const jokeList = [
+            "Why do programmers prefer dark mode? Because light attracts bugs 🐛",
+            "Mind: *thinking about code* also mind: let's play matrix 😌",
+            "I told my computer I needed a break... now it won’t stop sending me ads for vacations.",
+            "Why was the JavaScript developer sad? He didn't Node how to Express himself 💔",
+            "Debugging: being the detective in a crime movie where you're also the murderer 🕵️",
+            "A fresh mind keeps the bugs away. Tap tap tap!",
+            "Reality is just a matrix… with high scores 🎮",
+            "I’d tell you a joke about UDP but you might not get it.",
+            "Why do they call it hypertext? Too much JAVA ☕",
+            "Matrix Mind: 90% relaxation, 10% blinking squares",
+            "Q: What do you call a fake noodle? A: An impasta 🤣",
+            "Parallel lines have so much in common. It’s a shame they’ll never meet.",
+            "I’m reading a book on anti-gravity. It’s impossible to put down!",
+            "Why don’t skeletons fight each other? They don’t have the guts.",
+            "What do you call a bear with no teeth? A gummy bear 😁"
+        ];
+
+        // ---------- GAME STATE ----------
+        let score = 0;
+        let moves = 0;
+        let activeIndex = -1;            // which tile is glowing (0-15)
+        const totalCells = 16;
+
+        // DOM elements
+        const matrixEl = document.getElementById('matrixGrid');
+        const scoreSpan = document.getElementById('scoreValue');
+        const moveSpan = document.getElementById('moveCounter');
+        const jokeMsg = document.getElementById('jokeMessage');
+        const mindFreeSpan = document.getElementById('dynamicMindText');
+        const newJokeBtn = document.getElementById('newJokeBtn');
+        const resetBtn = document.getElementById('resetGameBtn');
+
+        // helper: random joke set (also update mind message)
+        function setRandomJoke() {
+            const randomIdx = Math.floor(Math.random() * jokeList.length);
+            jokeMsg.textContent = jokeList[randomIdx];
+            // also update mind relaxing message (little shorter)
+            if (randomIdx % 3 === 0) {
+                mindFreeSpan.textContent = "🧘 breathe... click the glowing one";
+            } else if (randomIdx % 3 === 1) {
+                mindFreeSpan.textContent = "✨ focus on light, forget stress";
+            } else {
+                mindFreeSpan.textContent = "🌀 matrix flow · you are doing great";
+            }
+        }
+
+        // pick random tile (different from current if possible)
+        function pickRandomTile() {
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * totalCells);
+            } while (newIndex === activeIndex && totalCells > 1);   // avoid same tile if possible
+            return newIndex;
+        }
+
+        // re-render grid based on active index
+        function renderGrid() {
+            let html = '';
+            for (let i = 0; i < totalCells; i++) {
+                const glowClass = (i === activeIndex) ? 'matrix-glow' : '';
+                html += `<div class="matrix-card ${glowClass}" data-cell="${i}">${i === activeIndex ? '◉' : '○'}</div>`;
+            }
+            matrixEl.innerHTML = html;
+        }
+
+        // update UI scores
+        function refreshUI() {
+            scoreSpan.textContent = score;
+            moveSpan.textContent = moves;
+        }
+
+        // moves & score update + random new active
+        function handleCellClick(e) {
+            const cellDiv = e.target.closest('.matrix-card');
+            if (!cellDiv) return;               // clicked gap
+
+            const cellIdx = parseInt(cellDiv.dataset.cell, 10);
+
+            // if the clicked cell is the glowing one (activeIndex)
+            if (cellIdx === activeIndex) {
+                // increase score, moves
+                score++;
+                moves++;
+
+                // every 5 moves, new joke appears
+                if (moves % 5 === 0) {
+                    setRandomJoke();
+                }
+
+                // move active to a new random tile
+                activeIndex = pickRandomTile();
+                renderGrid();
+                refreshUI();
+
+                // optional mind free message update after 10 points
+                if (score === 10) mindFreeSpan.textContent = "🎉 double digits! mind expanding";
+                if (score === 25) mindFreeSpan.textContent = "🌟 you're a matrix master, yet calm";
+            } else {
+                // wrong tile — just a tiny feedback (no penalty, but no score)
+                cellDiv.style.transform = 'scale(0.9)';
+                setTimeout(() => cellDiv.style.transform = '', 120);
+                // still count move? optional. we count moves only on correct? but we want move for joke? let's count move anyway for joke trigger
+                moves++;
+                if (moves % 5 === 0) setRandomJoke();
+                refreshUI();
+                // update move counter but active remains
+            }
+        }
+
+        // reset everything 
+        function resetGame() {
+            score = 0;
+            moves = 0;
+            activeIndex = Math.floor(Math.random() * totalCells); // fresh random start
+            renderGrid();
+            refreshUI();
+            setRandomJoke();   // fresh joke
+            mindFreeSpan.textContent = "🔄 fresh matrix · new mindset";
+        }
+
+        // initialize game / first random active
+        function initGame() {
+            activeIndex = Math.floor(Math.random() * totalCells);
+            renderGrid();
+            refreshUI();
+            setRandomJoke();
+            // attach event listener to container (event delegation)
+            matrixEl.addEventListener('click', handleCellClick);
+        }
+
+        // button events
+        newJokeBtn.addEventListener('click', function() {
+            setRandomJoke();
+            // also small mind boost
+            mindFreeSpan.textContent = "😄 laughter clears the cache";
+        });
+
+        resetBtn.addEventListener('click', resetGame);
+
+        // start everything
+        initGame();
+
+        // extra: footer joke update on hover? nah, but add year
+        document.getElementById('footerJokeTip').innerHTML = ' · 🧠 matrix edition';
+
+    })();
+</script>
+</body>
+</html>

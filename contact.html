@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Me | Vidura Liyanage</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #0a0c0f;
+            color: #e4e7ec;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .contact-container {
+            max-width: 1100px;
+            width: 100%;
+            background: #101216;
+            border-radius: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+            border: 1px solid #2a2f38;
+        }
+
+        .contact-header {
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .contact-header h1 {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+        }
+
+        .contact-header i {
+            margin-right: 8px;
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 3rem;
+        }
+
+        /* Left Side - Contact Form */
+        .form-section {
+            background: #151a21;
+            border-radius: 30px;
+            padding: 2rem;
+            border: 1px solid #2a2f38;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-title i {
+            color: #8b5cf6;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #a0a8b7;
+            font-size: 0.95rem;
+        }
+
+        .form-group label i {
+            color: #8b5cf6;
+            width: 20px;
+            margin-right: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: #1e222a;
+            border: 1px solid #2f3540;
+            border-radius: 16px;
+            color: white;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+
+        .form-control::placeholder {
+            color: #4b5563;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px #8b5cf6;
+        }
+
+        .submit-btn i {
+            font-size: 1.2rem;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* Notification Message */
+        .form-notification {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 12px;
+            background: #1e222a;
+            border-left: 4px solid #8b5cf6;
+            display: none;
+        }
+
+        .form-notification.show {
+            display: block;
+        }
+
+        .form-notification.success {
+            border-left-color: #10b981;
+        }
+
+        .form-notification.error {
+            border-left-color: #ef4444;
+        }
+
+        /* Right Side - Contact Info */
+        .info-section {
+            background: #151a21;
+            border-radius: 30px;
+            padding: 2rem;
+            border: 1px solid #2a2f38;
+        }
+
+        .info-card {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .info-icon {
+            width: 80px;
+            height: 80px;
+            background: #1e222a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            border: 2px solid #8b5cf6;
+        }
+
+        .info-icon i {
+            font-size: 2.5rem;
+            color: #8b5cf6;
+        }
+
+        .info-card h3 {
+            color: white;
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .info-card p {
+            color: #9ca3af;
+            margin-bottom: 0.3rem;
+        }
+
+        .contact-details {
+            margin: 2rem 0;
+            padding: 1.5rem 0;
+            border-top: 1px solid #2a2f38;
+            border-bottom: 1px solid #2a2f38;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+            padding: 0.5rem;
+            background: #1e222a;
+            border-radius: 12px;
+            transition: 0.2s;
+        }
+
+        .detail-item:hover {
+            background: #262b34;
+        }
+
+        .detail-icon {
+            width: 45px;
+            height: 45px;
+            background: #8b5cf6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .detail-text {
+            flex: 1;
+        }
+
+        .detail-text h4 {
+            color: white;
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .detail-text a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .detail-text a:hover {
+            color: #8b5cf6;
+        }
+
+        /* Social Links */
+        .social-section {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .social-section h3 {
+            color: white;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            background: #1e222a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a0a8b7;
+            font-size: 1.5rem;
+            transition: 0.2s;
+            border: 1px solid #2f3540;
+        }
+
+        .social-link:hover {
+            background: #8b5cf6;
+            color: white;
+            transform: translateY(-3px);
+            border-color: #8b5cf6;
+        }
+
+        /* Call to Action */
+        .cta-message {
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            padding: 1.5rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .cta-message p {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .cta-message i {
+            margin-right: 8px;
+        }
+
+        /* Back Link */
+        .back-link {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid #2a2f38;
+        }
+
+        .back-link a {
+            color: #9ca3af;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.8rem 2rem;
+            background: #151a21;
+            border-radius: 30px;
+            border: 1px solid #2a2f38;
+            transition: 0.2s;
+        }
+
+        .back-link a:hover {
+            border-color: #8b5cf6;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .contact-content {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+            }
+            
+            .contact-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="contact-container">
+        <!-- Header -->
+        <div class="contact-header">
+            <h1><i class="fas fa-paper-plane"></i> Let's Work Together</h1>
+            <p>Have a project in mind? Let's discuss and bring your ideas to life! 🚀</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="contact-content">
+            <!-- LEFT: Contact Form -->
+            <div class="form-section">
+                <div class="form-title">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>Send me a message</span>
+                </div>
+
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Your Name</label>
+                        <input type="text" class="form-control" id="name" placeholder="John Doe" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> Email Address</label>
+                        <input type="email" class="form-control" id="email" placeholder="john@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fab fa-whatsapp"></i> WhatsApp Number</label>
+                        <input type="text" class="form-control" id="whatsapp" placeholder="+94 76 123 4567" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-project-diagram"></i> Project Idea / Message</label>
+                        <textarea class="form-control" id="message" placeholder="Tell me about your project idea..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <i class="fas fa-paper-plane"></i>
+                        Send Message
+                    </button>
+
+                    <div class="form-notification" id="notification">
+                        <i class="fas" id="notificationIcon"></i>
+                        <span id="notificationMessage"></span>
+                    </div>
+                </form>
+            </div>
+
+            <!-- RIGHT: Contact Info & Social -->
+            <div class="info-section">
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>Need a Software or Website?</h3>
+                    <p>I'm here to help you build amazing digital solutions!</p>
+                    <p style="color: #8b5cf6; margin-top: 0.5rem;">👇 Contact me for:</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 2rem;">
+                    <div style="background: #1e222a; padding: 1rem; border-radius: 12px; text-align: center;">
+                        <i class="fas fa-laptop-code" style="color: #8b5cf6; font-size: 1.5rem; margin-bottom: 0.3rem;"></i>
+                        <p style="color: white; font-size: 0.9rem;">Websites</p>
+                    </div>
+                    <div style="background: #1e222a; padding: 1rem; border-radius: 12px; text-align: center;">
+                        <i class="fas fa-mobile-alt" style="color: #8b5cf6; font-size: 1.5rem; margin-bottom: 0.3rem;"></i>
+                        <p style="color: white; font-size: 0.9rem;">Mobile Apps</p>
+                    </div>
+                    <div style="background: #1e222a; padding: 1rem; border-radius: 12px; text-align: center;">
+                        <i class="fas fa-code" style="color: #8b5cf6; font-size: 1.5rem; margin-bottom: 0.3rem;"></i>
+                        <p style="color: white; font-size: 0.9rem;">Software</p>
+                    </div>
+                    <div style="background: #1e222a; padding: 1rem; border-radius: 12px; text-align: center;">
+                        <i class="fas fa-robot" style="color: #8b5cf6; font-size: 1.5rem; margin-bottom: 0.3rem;"></i>
+                        <p style="color: white; font-size: 0.9rem;">Automation</p>
+                    </div>
+                </div>
+
+                <!-- Contact Details -->
+                <div class="contact-details">
+                    <div class="detail-item">
+                        <div class="detail-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="detail-text">
+                            <h4>Email</h4>
+                            <a href="mailto:viduraliyanage012@gmail.com">viduraliyanage012@gmail.com</a>
+                        </div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-icon"><i class="fab fa-whatsapp"></i></div>
+                        <div class="detail-text">
+                            <h4>WhatsApp</h4>
+                            <a href="https://wa.me/+94766161921">+94 76 616 1921</a>
+                        </div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-icon"><i class="fas fa-phone-alt"></i></div>
+                        <div class="detail-text">
+                            <h4>Phone</h4>
+                            <a href="tel:+94766161921">+94 76 616 1921</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Links -->
+                <div class="social-section">
+                    <h3>Connect with me</h3>
+                    <div class="social-links">
+                        <a href="https://github.com/Viduraliyanage1" target="_blank" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/vidura-liyanage-61b11324b" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://wa.me/+94766161921" target="_blank" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://web.facebook.com/vidura.lakshan.liyanage" target="_blank" class="social-link"><i class="fab fa-facebook"></i></a>
+                        <a href="mailto:viduraliyanage012@gmail.com" target="_blank" class="social-link"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+
+                <!-- Call to Action -->
+                <div class="cta-message">
+                    <p><i class="fas fa-rocket"></i> Let's build something amazing together!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back Link -->
+        <div class="back-link">
+            <a href="index.html">
+                <i class="fas fa-arrow-left"></i>
+                Back to Portfolio
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            databaseURL: "YOUR_DATABASE_URL",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Form elements
+        const contactForm = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const notification = document.getElementById('notification');
+        const notificationIcon = document.getElementById('notificationIcon');
+        const notificationMessage = document.getElementById('notificationMessage');
+
+        // Form submission
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Get form values
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const whatsapp = document.getElementById('whatsapp').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            // Validate
+            if (!name || !email || !whatsapp || !message) {
+                showNotification('error', 'Please fill in all fields');
+                return;
+            }
+
+            if (!isValidEmail(email)) {
+                showNotification('error', 'Please enter a valid email address');
+                return;
+            }
+
+            // Disable button
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+            try {
+                // Save to Firebase
+                const timestamp = new Date().toISOString();
+                const contactRef = database.ref('contacts').push();
+                
+                await contactRef.set({
+                    name: name,
+                    email: email,
+                    whatsapp: whatsapp,
+                    message: message,
+                    timestamp: timestamp,
+                    status: 'new'
+                });
+
+                // Show success message
+                showNotification('success', 'Message sent successfully! I\'ll get back to you soon.');
+                
+                // Clear form
+                contactForm.reset();
+
+            } catch (error) {
+                console.error('Error saving to Firebase:', error);
+                showNotification('error', 'Something went wrong. Please try again later.');
+            } finally {
+                // Enable button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+            }
+        });
+
+        // Email validation
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Show notification
+        function showNotification(type, message) {
+            notification.className = 'form-notification show ' + type;
+            
+            if (type === 'success') {
+                notificationIcon.className = 'fas fa-check-circle';
+            } else {
+                notificationIcon.className = 'fas fa-exclamation-circle';
+            }
+            
+            notificationMessage.textContent = message;
+
+            // Auto hide after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
